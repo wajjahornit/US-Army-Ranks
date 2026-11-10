@@ -1,0 +1,35 @@
+<!--
+    In SPT 4.x this project file replaces the old package.json.
+    The mod's name, version and SPT compatibility now live in the ModMetadata
+    record inside ArmyRanksMod.cs; this file only says how to build the DLL.
+-->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <!-- SPT 4.1.x runs on .NET 10, so mods must target net10.0 -->
+        <TargetFramework>net10.0</TargetFramework>
+        <RootNamespace>ArmyRanks</RootNamespace>
+        <AssemblyName>ArmyRanks</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
+        <Version>1.0.0</Version>
+        <!-- Builds into bin\Release\ArmyRanks\ so the folder can be copied straight into SPT\user\mods -->
+        <OutputPath>bin\$(Configuration)\$(AssemblyName)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The rank table is shared with the client plugin -->
+        <Compile Include="..\Shared\ArmyRankTable.cs" Link="ArmyRankTable.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- The server's own libraries, pulled from NuGet. Keep these in step with your SPT version.
+             ExcludeAssets=runtime stops copies of them landing next to your DLL; the server already has them. -->
+        <PackageReference Include="SPTarkov.Common" Version="4.1.2" ExcludeAssets="runtime" />
+        <PackageReference Include="SPTarkov.DI" Version="4.1.2" ExcludeAssets="runtime" />
+        <PackageReference Include="SPTarkov.Server.Core" Version="4.1.2" ExcludeAssets="runtime" />
+    </ItemGroup>
+
+</Project>

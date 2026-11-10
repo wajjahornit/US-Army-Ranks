@@ -1,0 +1,47 @@
+<!--
+    BepInEx client plugin. This is the half that actually swaps the level number for a rank,
+    because the game client draws that number itself and never asks the server for it.
+
+    Set EftDir to your SPT install folder (the one with EscapeFromTarkov.exe), either here
+    or on the command line:  dotnet build -c Release -p:EftDir="C:\SPT"
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- The game runs Unity's Mono, which needs a .NET Framework 4.7.2 library -->
+        <TargetFramework>net472</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>disable</Nullable>
+        <AssemblyName>ArmyRanksClient</AssemblyName>
+        <RootNamespace>ArmyRanks</RootNamespace>
+        <Version>1.0.0</Version>
+        <EftDir Condition="'$(EftDir)' == ''">C:\SPT</EftDir>
+        <Managed>$(EftDir)\EscapeFromTarkov_Data\Managed</Managed>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\Shared\ArmyRankTable.cs" Link="ArmyRankTable.cs" />
+        <!-- Rank emblems, built into the DLL. Named by abbreviation, e.g. Icons\SGT.png -->
+        <EmbeddedResource Include="Icons\*.png" LogicalName="ArmyRanks.Icons.%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Lets this build on machines without the .NET Framework 4.7.2 developer pack -->
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- All of these already ship with the game / BepInEx, so Private=false keeps them out of the output -->
+        <Reference Include="BepInEx"><HintPath>$(EftDir)\BepInEx\core\BepInEx.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="0Harmony"><HintPath>$(EftDir)\BepInEx\core\0Harmony.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="Assembly-CSharp"><HintPath>$(Managed)\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="Sirenix.Serialization"><HintPath>$(Managed)\Sirenix.Serialization.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="Comfort"><HintPath>$(Managed)\Comfort.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="UnityEngine"><HintPath>$(Managed)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="UnityEngine.CoreModule"><HintPath>$(Managed)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(Managed)\UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="UnityEngine.UI"><HintPath>$(Managed)\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+        <Reference Include="Unity.TextMeshPro"><HintPath>$(Managed)\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
+    </ItemGroup>
+
+</Project>
