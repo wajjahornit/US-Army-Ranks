@@ -36,7 +36,7 @@ dotnet build ArmyRanksClient/ArmyRanksClient.csproj -c Release -p:EftDir="C:\SPT
 
 ## Install (release zip)
 
-Extract `ArmyRanks-1.0.0.zip` into your SPT game folder, the one that has `EscapeFromTarkov.exe` and the `BepInEx` folder. It contains `BepInEx\plugins\ArmyRanksClient.dll` and `SPT_Runtime\user\mods\ArmyRanks\ArmyRanks.dll`. If your server's mods folder is somewhere else, move the `ArmyRanks` folder into that `user\mods`.
+Extract the release zip (e.g. `ArmyRanks-1.0.1.zip`) into your SPT game folder, the one that has `EscapeFromTarkov.exe` and the `BepInEx` folder. It contains `BepInEx\plugins\ArmyRanksClient.dll` and `SPT_Runtime\user\mods\ArmyRanks\ArmyRanks.dll`. If your server's mods folder is somewhere else, move the `ArmyRanks` folder into that `user\mods`.
 
 ## Install (from source)
 

@@ -32,7 +32,7 @@ namespace ArmyRanks
     /// The soft dependency makes BepInEx load MenuOverhaul first when it's installed (so we can
     /// hook it), and changes nothing when it isn't.
     /// </summary>
-    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.0.0")]
+    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.0.1")]
     [BepInDependency(MenuOverhaulCompat.Guid, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
@@ -239,14 +239,14 @@ namespace ArmyRanks
             // of the box, towards the model, instead of off the right edge of the screen.
             // The label may have auto-size on, which would squeeze the rank into the pinned
             // width (that's what made it tiny), so it's switched off. Long ranks stack onto two
-            // lines at 30pt with tightened spacing so they fit the 54pt row height.
+            // lines at 30pt, with line spacing pulled in a little so they sit close together.
             var text = Plugin.StackedRankText(profile.Info.Level);
             var stacked = text.Contains("\n");
             label.enableAutoSizing = false;
             label.overflowMode = TextOverflowModes.Overflow;
             label.enableWordWrapping = false;
             label.fontSize = stacked ? 30f : text.Length > 3 ? 40f : 54f;
-            label.lineSpacing = stacked ? -18f : 0f;
+            label.lineSpacing = stacked ? -8f : 0f;
             label.text = text;
 
             // The rank emblem replaces the game's chevron here too. MenuOverhaul puts the icon to
@@ -261,14 +261,17 @@ namespace ArmyRanks
                 {
                     RankIcons.Apply(image, profile.Info.Level);
 
-                    // The icon slot is a 56x56 square, but most emblems are tall and narrow, which
-                    // left empty space between the emblem and the rank. Size the slot to the emblem.
+                    // MenuOverhaul's icon slot is a 56x56 square. Make it a bit taller (64) so the
+                    // emblem reads clearly, and as wide as the emblem itself so its spacing is real.
                     var iconLayout = icon.GetComponent<LayoutElement>();
                     if (iconLayout != null && image.sprite != null && image.sprite.rect.height > 0f)
                     {
-                        var width = Mathf.Min(56f, 56f * image.sprite.rect.width / image.sprite.rect.height);
+                        const float emblemHeight = 64f;
+                        var width = Mathf.Min(emblemHeight, emblemHeight * image.sprite.rect.width / image.sprite.rect.height);
                         iconLayout.minWidth = width;
                         iconLayout.preferredWidth = width;
+                        iconLayout.minHeight = emblemHeight;
+                        iconLayout.preferredHeight = emblemHeight;
                     }
                 }
             }
@@ -278,7 +281,7 @@ namespace ArmyRanks
             if (rowLayout != null)
             {
                 rowLayout.reverseArrangement = false;
-                rowLayout.spacing = 4f;
+                rowLayout.spacing = 18f; // breathing room between rank title and emblem
             }
         }
     }
@@ -355,7 +358,7 @@ namespace ArmyRanks
             var drawnWidth = Mathf.Min(iconWidth, iconHeight * spriteRect.width / spriteRect.height);
             var emblemRight = (bottomLeft.x + topRight.x) / 2f + drawnWidth / 2f;
             var gap = labelRect.rect.xMin - emblemRight;
-            var wanted = iconHeight * 0.15f;
+            var wanted = iconHeight * 0.4f;
             var margin = label.margin;
             margin.x = gap > wanted ? -(gap - wanted) : 0f;
             label.margin = margin;
