@@ -32,11 +32,15 @@ namespace ArmyRanks
     /// The soft dependency makes BepInEx load MenuOverhaul first when it's installed (so we can
     /// hook it), and changes nothing when it isn't.
     /// </summary>
-    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.0.1")]
+    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.1.0")]
     [BepInDependency(MenuOverhaulCompat.Guid, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ConfigEntry<RankDisplayStyle> DisplayStyle;
+        internal static ConfigEntry<RankSystem> ArmySetting;
+
+        /// <summary>The rank for a level in the army picked in the config.</summary>
+        internal static ArmyRank RankFor(int level) => ArmyRankTable.ForLevel(level, ArmySetting.Value);
 
         private void Awake()
         {
@@ -46,6 +50,11 @@ namespace ArmyRanks
                 "Rank format",
                 RankDisplayStyle.FullTitle,
                 "How a rank is written where the game used to show your level number.");
+            ArmySetting = Config.Bind(
+                "Display",
+                "Rank system",
+                RankSystem.USArmy,
+                "Which army's ranks and emblems to use. Reopen a screen to see the change.");
 
             // Harmony finds the [HarmonyPatch] classes below and hooks them onto the game's methods.
             var harmony = new Harmony("com.cotti.armyranks.client");
@@ -63,7 +72,7 @@ namespace ArmyRanks
         /// <summary>The text to show for a level, in the style picked in the config.</summary>
         internal static string RankText(int level)
         {
-            var rank = ArmyRankTable.ForLevel(level);
+            var rank = RankFor(level);
             switch (DisplayStyle.Value)
             {
                 case RankDisplayStyle.FullTitleWithGrade:
@@ -85,7 +94,7 @@ namespace ArmyRanks
         /// </summary>
         internal static string StackedRankText(int level)
         {
-            var rank = ArmyRankTable.ForLevel(level);
+            var rank = RankFor(level);
             switch (DisplayStyle.Value)
             {
                 case RankDisplayStyle.FullTitle:
@@ -298,7 +307,7 @@ namespace ArmyRanks
 
         public static Sprite ForLevel(int level)
         {
-            var key = ArmyRankTable.ForLevel(level).Abbreviation;
+            var key = Plugin.RankFor(level).IconKey;
             if (Cache.TryGetValue(key, out var cached))
             {
                 return cached;
