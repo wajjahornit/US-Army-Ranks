@@ -48,10 +48,9 @@ namespace ArmyRanks
                 return "";
             }
 
-            // Warrant officer names already end in a number ("Chief Warrant Officer 2"), and
-            // "Chief Warrant Officer 2 II" reads badly, so those keep their plain name.
-            var title = RankFor(level).Title;
-            if (char.IsDigit(title[title.Length - 1]))
+            // Warrant officer names already carry their own numeral ("Chief Warrant Officer II"),
+            // and "Chief Warrant Officer II II" reads badly, so those keep their plain name.
+            if (RankFor(level).Title.Contains("Warrant Officer"))
             {
                 return "";
             }

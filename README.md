@@ -50,7 +50,7 @@ The client creates `BepInEx\config\com.cotti.armyranks.client.cfg` (also editabl
 
 **Rank system**: `USArmy` (default) or `BritishArmy`. Reopen a screen to see the change.
 
-**Rank grades**: `true` (default). A rank that lasts several levels gets a roman numeral for each one: Sergeant I, Sergeant II, Sergeant III, then Staff Sergeant I. A rank that lasts one level (Corporal, General of the Army) has no numeral, and neither do the warrant officers, whose names already end in a number. Set to `false` for plain names.
+**Rank grades**: `true` (default). A rank that lasts several levels gets a roman numeral for each one: Sergeant I, Sergeant II, Sergeant III, then Staff Sergeant I. A rank that lasts one level (Corporal, General of the Army) has no numeral, and neither do the warrant officers, whose names already carry a numeral (Chief Warrant Officer III). Set to `false` for plain names.
 
 **Rank format**:
 

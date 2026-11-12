@@ -54,11 +54,11 @@ public static class ArmyRankTable
         (25, 25, new("Command Sergeant Major", "CSM", "E-9")),
 
         // Warrant Officers
-        (26, 27, new("Warrant Officer 1", "WO1", "W-1")),
-        (28, 29, new("Chief Warrant Officer 2", "CW2", "W-2")),
-        (30, 31, new("Chief Warrant Officer 3", "CW3", "W-3")),
-        (32, 33, new("Chief Warrant Officer 4", "CW4", "W-4")),
-        (34, 35, new("Chief Warrant Officer 5", "CW5", "W-5")),
+        (26, 27, new("Warrant Officer I", "WO1", "W-1")),
+        (28, 29, new("Chief Warrant Officer II", "CW2", "W-2")),
+        (30, 31, new("Chief Warrant Officer III", "CW3", "W-3")),
+        (32, 33, new("Chief Warrant Officer IV", "CW4", "W-4")),
+        (34, 35, new("Chief Warrant Officer V", "CW5", "W-5")),
 
         // Company Grade Officers
         (36, 38, new("Second Lieutenant", "2LT", "O-1")),
