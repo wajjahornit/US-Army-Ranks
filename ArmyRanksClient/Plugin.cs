@@ -32,12 +32,25 @@ namespace ArmyRanks
     /// The soft dependency makes BepInEx load MenuOverhaul first when it's installed (so we can
     /// hook it), and changes nothing when it isn't.
     /// </summary>
-    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.1.0")]
+    [BepInPlugin("com.cotti.armyranks.client", "ArmyRanks Client", "1.2.0")]
     [BepInDependency(MenuOverhaulCompat.Guid, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ConfigEntry<RankDisplayStyle> DisplayStyle;
         internal static ConfigEntry<RankSystem> ArmySetting;
+        internal static ConfigEntry<bool> ShowGrades;
+
+        /// <summary>" II" when this level is the 2nd of a rank that lasts several levels, else "".</summary>
+        internal static string GradeSuffix(int level)
+        {
+            if (ShowGrades == null || !ShowGrades.Value)
+            {
+                return "";
+            }
+
+            var grade = ArmyRankTable.GradeForLevel(level, ArmySetting.Value);
+            return grade > 0 ? " " + ArmyRankTable.ToRoman(grade) : "";
+        }
 
         /// <summary>The rank for a level in the army picked in the config.</summary>
         internal static ArmyRank RankFor(int level) => ArmyRankTable.ForLevel(level, ArmySetting.Value);
@@ -55,6 +68,11 @@ namespace ArmyRanks
                 "Rank system",
                 RankSystem.USArmy,
                 "Which army's ranks and emblems to use. Reopen a screen to see the change.");
+            ShowGrades = Config.Bind(
+                "Display",
+                "Rank grades",
+                true,
+                "Number a rank that lasts several levels with roman numerals (Sergeant I, Sergeant II, Sergeant III). Ranks that last one level stay as they are.");
 
             // Harmony finds the [HarmonyPatch] classes below and hooks them onto the game's methods.
             var harmony = new Harmony("com.cotti.armyranks.client");
@@ -73,18 +91,19 @@ namespace ArmyRanks
         internal static string RankText(int level)
         {
             var rank = RankFor(level);
+            var grade = GradeSuffix(level);
             switch (DisplayStyle.Value)
             {
                 case RankDisplayStyle.FullTitleWithGrade:
-                    return rank.ToString();
+                    return rank.Title + grade + " (" + rank.Abbreviation + " / " + rank.PayGrade + ")";
                 case RankDisplayStyle.Abbreviation:
-                    return rank.Abbreviation;
+                    return rank.Abbreviation + grade;
                 case RankDisplayStyle.PayGrade:
-                    return rank.PayGrade;
+                    return rank.PayGrade + grade;
                 case RankDisplayStyle.AbbreviationAndPayGrade:
-                    return rank.Abbreviation + " " + rank.PayGrade;
+                    return rank.Abbreviation + grade + " " + rank.PayGrade;
                 default:
-                    return rank.Title;
+                    return rank.Title + grade;
             }
         }
 
@@ -97,10 +116,11 @@ namespace ArmyRanks
             var rank = RankFor(level);
             switch (DisplayStyle.Value)
             {
+                // The numeral stays on the last line with the end of the name ("Staff\nSergeant II").
                 case RankDisplayStyle.FullTitle:
-                    return SplitInTwo(rank.Title);
+                    return SplitInTwo(rank.Title) + GradeSuffix(level);
                 case RankDisplayStyle.FullTitleWithGrade:
-                    return rank.Title + "\n(" + rank.Abbreviation + " / " + rank.PayGrade + ")";
+                    return rank.Title + GradeSuffix(level) + "\n(" + rank.Abbreviation + " / " + rank.PayGrade + ")";
                 default:
                     return RankText(level);
             }

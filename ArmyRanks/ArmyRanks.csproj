@@ -13,7 +13,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
         <!-- Builds into bin\Release\ArmyRanks\ so the folder can be copied straight into SPT\user\mods -->
         <OutputPath>bin\$(Configuration)\$(AssemblyName)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

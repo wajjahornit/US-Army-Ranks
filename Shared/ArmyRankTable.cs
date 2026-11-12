@@ -117,6 +117,41 @@ public static class ArmyRankTable
         (79, 79, new("Field Marshal", "FM", "OF-10", "UK_FM")),
     ];
 
+    /// <summary>
+    /// Where a level sits inside its rank's level range, from 1. Returns 0 when the rank
+    /// covers a single level, so it needs no grade (Corporal, General of the Army).
+    /// </summary>
+    public static int GradeForLevel(int level, RankSystem system = RankSystem.USArmy)
+    {
+        var ranges = system == RankSystem.BritishArmy ? BritishRanges : UsRanges;
+        var clamped = level < 1 ? 1 : level > MaxLevel ? MaxLevel : level;
+        foreach (var (from, to, _) in ranges)
+        {
+            if (clamped >= from && clamped <= to)
+            {
+                return from == to ? 0 : clamped - from + 1;
+            }
+        }
+
+        return 0;
+    }
+
+    /// <summary>1 to I, 4 to IV, 8 to VIII. Empty for 0.</summary>
+    public static string ToRoman(int number)
+    {
+        var result = "";
+        foreach (var (value, numeral) in new[] { (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I") })
+        {
+            while (number >= value)
+            {
+                result += numeral;
+                number -= value;
+            }
+        }
+
+        return result;
+    }
+
     /// <summary>Rank for a player level. Below 1 counts as 1; above 79 stays the top rank.</summary>
     public static ArmyRank ForLevel(int level, RankSystem system = RankSystem.USArmy)
     {
