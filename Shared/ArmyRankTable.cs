@@ -8,6 +8,8 @@ public enum RankSystem
 {
     USArmy,
     BritishArmy,
+    RussianArmy,
+    GermanArmy,
 }
 
 /// <summary>
@@ -115,6 +117,85 @@ public static class ArmyRankTable
 
         // The Ultimate End Game
         (79, 79, new("Field Marshal", "FM", "OF-10", "UK_FM")),
+    ];
+    private static readonly (int From, int To, ArmyRank Rank)[] GermanRanges =
+    [
+        // Mannschaften
+        (1, 1, new("Schütze", "Schtz", "OR-1", "DE_Schtz")),
+        (2, 2, new("Gefreiter", "Gefr", "OR-2", "DE_Gefr")),
+        (3, 4, new("Obergefreiter", "OGefr", "OR-3", "DE_OGefr")),
+        (5, 6, new("Hauptgefreiter", "HptGefr", "OR-3", "DE_HGefr")),
+        (7, 8, new("Stabsgefreiter", "StGefr", "OR-4", "DE_StGefr")),
+        (9, 10, new("Oberstabsgefreiter", "OStGefr", "OR-4", "DE_OStGefr")),
+        (11, 12, new("Korporal", "Korp", "OR-4", "DE_Korp")),
+        (13, 14, new("Stabskorporal", "StKorp", "OR-4", "DE_StKorp")),
+
+        // Unteroffiziere ohne Portepee & Fahnenjunker
+        (15, 16, new("Unteroffizier", "Uffz", "OR-5", "DE_Uffz")),
+        (17, 18, new("Stabsunteroffizier", "StUffz", "OR-5", "DE_StUffz")),
+        (19, 20, new("Fahnenjunker", "Fhj", "OR-5", "DE_Fhj")),
+
+        // Unteroffiziere mit Portepee & Fähnriche
+        (21, 22, new("Feldwebel", "Fw", "OR-6", "DE_Fw")),
+        (23, 24, new("Oberfeldwebel", "OFw", "OR-6", "DE_OFw")),
+        (25, 26, new("Hauptfeldwebel", "HptFw", "OR-7", "DE_HFw")),
+        (27, 28, new("Stabsfeldwebel", "StFw", "OR-8", "DE_StFw")),
+        (29, 30, new("Oberstabsfeldwebel", "OStFw", "OR-9", "DE_OStFw")),
+        (31, 33, new("Fähnrich", "Fähnr", "OR-6", "DE_Faehnrich")),
+        (34, 36, new("Oberfähnrich", "OFähnr", "OR-7", "DE_OFaehnrich")),
+
+        // Leutnante & Hauptleute
+        (37, 39, new("Leutnant", "Lt", "OF-1", "DE_Lt")),
+        (40, 42, new("Oberleutnant", "OLt", "OF-1", "DE_OLt")),
+        (43, 45, new("Hauptmann", "Hptm", "OF-2", "DE_Hptm")),
+        (46, 48, new("Stabshauptmann", "StHptm", "OF-2", "DE_StHptm")),
+
+        // Stabsoffiziere
+        (49, 52, new("Major", "Maj", "OF-3", "DE_Maj")),
+        (53, 56, new("Oberstleutnant", "Oberstlt", "OF-4", "DE_Oberstlt")),
+        (57, 60, new("Oberst", "Oberst", "OF-5", "DE_Oberst")),
+
+        // Generale
+        (61, 65, new("Brigadegeneral", "BrigGen", "OF-6", "DE_BrigGen")),
+        (66, 70, new("Generalmajor", "GenMaj", "OF-7", "DE_GenMaj")),
+        (71, 75, new("Generalleutnant", "GenLt", "OF-8", "DE_GenLt")),
+        (76, 79, new("General", "Gen", "OF-9", "DE_Gen")),
+    ];
+    private static readonly (int From, int To, ArmyRank Rank)[] RussianRanges =
+    [
+        // Soldaten (Рядовые)
+        (1, 1, new("Рядовой", "Ряд.", "OR-1", "RU_Ryad")),
+        (2, 4, new("Ефрейтор", "Ефр.", "OR-2", "RU_Yefr")),
+
+        // Sergeanten (Сержанты)
+        (5, 7, new("Младший сержант", "Мл. с-нт", "OR-4", "RU_MlSgt")),
+        (8, 11, new("Сержант", "С-нт", "OR-5", "RU_Sgt")),
+        (12, 15, new("Старший сержант", "Ст. с-нт", "OR-6", "RU_StSgt")),
+        (16, 19, new("Старшина", "С-на", "OR-7", "RU_Stsh")),
+
+        // Praporschtschiks (Прапорщики)
+        (20, 24, new("Прапорщик", "Пр-к", "OR-8", "RU_Prap")),
+        (25, 29, new("Старший прапорщик", "Ст. пр-к", "OR-9", "RU_StPrap")),
+
+        // Leutnante & Hauptleute (Младшие офицеры)
+        (30, 33, new("Младший лейтенант", "Мл. л-т", "OF-1", "RU_MlLt")),
+        (34, 37, new("Лейтенант", "Л-т", "OF-1", "RU_Lt")),
+        (38, 41, new("Старший лейтенант", "Ст. л-т", "OF-1", "RU_StLt")),
+        (42, 46, new("Капитан", "К-н", "OF-2", "RU_Kpt")),
+
+        // Stabsoffiziere (Старшие офицеры)
+        (47, 51, new("Майор", "М-р", "OF-3", "RU_May")),
+        (52, 56, new("Подполковник", "П/п-к", "OF-4", "RU_PPolk")),
+        (57, 61, new("Полковник", "П-к", "OF-5", "RU_Polk")),
+
+        // Generale (Высшие офицеры)
+        (62, 66, new("Генерал-майор", "Ген.-м-р", "OF-6", "RU_GenMay")),
+        (67, 71, new("Генерал-лейтенант", "Ген.-л-т", "OF-7", "RU_GenLt")),
+        (72, 75, new("Генерал-полковник", "Ген.-п-к", "OF-8", "RU_GenPolk")),
+        (76, 78, new("Генерал армии", "Ген. армии", "OF-9", "RU_GenArm")),
+
+        // The Ultimate End Game
+        (79, 79, new("Маршал Российской Федерации", "Маршал РФ", "OF-10", "RU_Marshal")),
     ];
 
     /// <summary>
